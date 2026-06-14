@@ -1,0 +1,1627 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>The Sourdough Journey — Your Friendly Bread Companion</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --paper: #f7f0e1;
+    --paper-soft: #fbf6ea;
+    --canvas: #fffdf7;
+    --ink: #2a2722;
+    --ink-soft: #5a544a;
+    --ink-faint: #8a8478;
+    --line: #e8e0cc;
+    --line-strong: #d4c9ac;
+    --marigold: #e8a838;
+    --marigold-soft: #fbeac3;
+    --crust: #b86a3c;
+    --crust-soft: #f4d8c4;
+    --crust-deep: #8a4a25;
+    --sage: #7a8a5e;
+    --sage-soft: #dde4cf;
+    --berry: #a64b5c;
+    --berry-soft: #f0d4d8;
+    --cream-warm: #f4e8d0;
+    --shadow-soft: 0 1px 2px rgba(42, 39, 34, 0.04), 0 4px 12px rgba(42, 39, 34, 0.05);
+    --shadow-medium: 0 2px 8px rgba(42, 39, 34, 0.06), 0 12px 32px rgba(42, 39, 34, 0.08);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html, body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    background: var(--paper);
+    color: var(--ink);
+    line-height: 1.5;
+    font-size: 15px;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  .serif { font-family: 'Fraunces', Georgia, serif; font-weight: 500; letter-spacing: -0.02em; }
+
+  /* ---------- LAYOUT ---------- */
+  .app {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 48px 32px 96px;
+  }
+
+  header.hero {
+    text-align: center;
+    padding: 32px 0 56px;
+  }
+  .hero-eyebrow {
+    font-size: 11px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--crust);
+    font-weight: 500;
+    margin-bottom: 16px;
+  }
+  .hero h1 {
+    font-family: 'Fraunces', Georgia, serif;
+    font-weight: 500;
+    font-size: clamp(40px, 6vw, 64px);
+    line-height: 1.05;
+    letter-spacing: -0.025em;
+    color: var(--ink);
+    margin-bottom: 16px;
+  }
+  .hero h1 em {
+    font-style: italic;
+    color: var(--crust);
+    font-weight: 400;
+  }
+  .hero p {
+    font-size: 17px;
+    color: var(--ink-soft);
+    max-width: 520px;
+    margin: 0 auto;
+    line-height: 1.55;
+  }
+
+  /* ---------- TABS ---------- */
+  .tabs {
+    display: flex;
+    gap: 4px;
+    background: var(--paper-soft);
+    padding: 6px;
+    border-radius: 999px;
+    margin-bottom: 48px;
+    max-width: 540px;
+    margin-left: auto;
+    margin-right: auto;
+    border: 1px solid var(--line);
+  }
+  .tab {
+    flex: 1;
+    background: transparent;
+    border: none;
+    padding: 12px 16px;
+    border-radius: 999px;
+    font-family: inherit;
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--ink-soft);
+    cursor: pointer;
+    transition: all 0.25s ease;
+    letter-spacing: 0.01em;
+  }
+  .tab:hover { color: var(--ink); }
+  .tab.active {
+    background: var(--ink);
+    color: var(--paper);
+    box-shadow: var(--shadow-soft);
+  }
+  .tab .num {
+    display: inline-block;
+    width: 18px;
+    height: 18px;
+    line-height: 18px;
+    border-radius: 50%;
+    background: rgba(0,0,0,0.08);
+    font-size: 10px;
+    margin-right: 6px;
+    text-align: center;
+  }
+  .tab.active .num { background: rgba(255,255,255,0.15); }
+
+  /* ---------- PANELS ---------- */
+  .panel { display: none; animation: fadeIn 0.4s ease; }
+  .panel.active { display: block; }
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(8px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .section-title {
+    font-family: 'Fraunces', serif;
+    font-weight: 500;
+    font-size: 32px;
+    letter-spacing: -0.02em;
+    color: var(--ink);
+    margin-bottom: 8px;
+  }
+  .section-sub {
+    color: var(--ink-soft);
+    font-size: 15px;
+    margin-bottom: 40px;
+    max-width: 560px;
+  }
+
+  /* ---------- CARDS / BLOCKS ---------- */
+  .card {
+    background: var(--canvas);
+    border: 1px solid var(--line);
+    border-radius: 20px;
+    padding: 32px;
+    margin-bottom: 24px;
+    box-shadow: var(--shadow-soft);
+  }
+  .card.gentle {
+    background: var(--paper-soft);
+    border: 1px dashed var(--line-strong);
+    box-shadow: none;
+  }
+  .card-label {
+    font-size: 11px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+    font-weight: 500;
+    margin-bottom: 12px;
+  }
+
+  /* ---------- ENCOURAGEMENT ---------- */
+  .encourage {
+    background: var(--marigold-soft);
+    border-radius: 16px;
+    padding: 20px 24px;
+    margin-bottom: 24px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    font-size: 14px;
+    color: var(--ink);
+    border-left: 3px solid var(--marigold);
+  }
+  .encourage .icon {
+    font-size: 22px;
+    flex-shrink: 0;
+  }
+  .encourage strong { font-weight: 600; }
+
+  /* ---------- CONTROLS / INPUTS ---------- */
+  .row { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; margin-bottom: 16px; }
+  .field { display: flex; flex-direction: column; gap: 6px; }
+  .field label {
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--ink-soft);
+    letter-spacing: 0.04em;
+  }
+  .field input, .field select, .field textarea {
+    background: var(--paper-soft);
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    padding: 12px 14px;
+    font-family: inherit;
+    font-size: 14px;
+    color: var(--ink);
+    transition: all 0.2s;
+  }
+  .field input:focus, .field select:focus, .field textarea:focus {
+    outline: none;
+    border-color: var(--marigold);
+    background: var(--canvas);
+    box-shadow: 0 0 0 3px var(--marigold-soft);
+  }
+
+  /* ---------- BUTTONS ---------- */
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--ink);
+    color: var(--paper);
+    border: none;
+    border-radius: 999px;
+    padding: 12px 22px;
+    font-family: inherit;
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s;
+    letter-spacing: 0.01em;
+  }
+  .btn:hover { background: var(--crust); transform: translateY(-1px); }
+  .btn.ghost {
+    background: transparent;
+    color: var(--ink);
+    border: 1px solid var(--line-strong);
+  }
+  .btn.ghost:hover { background: var(--paper-soft); border-color: var(--ink); transform: none; }
+  .btn.crust { background: var(--crust); }
+  .btn.crust:hover { background: var(--crust-deep); }
+  .btn.small { padding: 8px 14px; font-size: 12px; }
+
+  /* ---------- CHECKLIST ---------- */
+  .checklist { list-style: none; display: flex; flex-direction: column; gap: 10px; }
+  .check-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+    padding: 16px 18px;
+    background: var(--paper-soft);
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .check-item:hover { background: var(--canvas); border-color: var(--line-strong); }
+  .check-item.done {
+    background: var(--sage-soft);
+    border-color: var(--sage);
+    opacity: 0.85;
+  }
+  .check-item.done .check-text { text-decoration: line-through; color: var(--ink-soft); }
+  .check-box {
+    flex-shrink: 0;
+    width: 22px;
+    height: 22px;
+    border: 1.5px solid var(--line-strong);
+    border-radius: 7px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 1px;
+    background: var(--canvas);
+    transition: all 0.2s;
+  }
+  .check-item.done .check-box {
+    background: var(--sage);
+    border-color: var(--sage);
+    color: white;
+  }
+  .check-text { font-size: 14px; line-height: 1.5; }
+  .check-text strong { font-weight: 600; }
+  .check-meta { font-size: 12px; color: var(--ink-faint); margin-top: 2px; }
+
+  /* ---------- TIMER ---------- */
+  .timer-bar {
+    background: var(--ink);
+    color: var(--paper);
+    border-radius: 16px;
+    padding: 20px 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 16px;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+  .timer-display {
+    font-family: 'Fraunces', serif;
+    font-size: 32px;
+    font-weight: 500;
+    letter-spacing: -0.02em;
+    font-variant-numeric: tabular-nums;
+  }
+  .timer-display .label-mini {
+    font-size: 11px;
+    letter-spacing: 0.15em;
+    color: rgba(255,255,255,0.6);
+    text-transform: uppercase;
+    margin-left: 8px;
+    font-family: 'Inter', sans-serif;
+    font-weight: 500;
+  }
+  .timer-controls { display: flex; gap: 8px; }
+  .timer-btn {
+    background: rgba(255,255,255,0.12);
+    color: var(--paper);
+    border: none;
+    border-radius: 999px;
+    padding: 8px 16px;
+    font-size: 12px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-family: inherit;
+  }
+  .timer-btn:hover { background: rgba(255,255,255,0.22); }
+  .timer-btn.primary { background: var(--marigold); color: var(--ink); }
+  .timer-btn.primary:hover { background: #f0b748; }
+
+  .timer-hidden { display: none; }
+  .timer-running .pulse { animation: pulse 2s ease-in-out infinite; }
+  @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.5; } }
+
+  /* ---------- FOLDING TECHNIQUE CARDS ---------- */
+  .folds {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 16px;
+    margin-top: 12px;
+  }
+  .fold-card {
+    background: var(--paper-soft);
+    border: 1px solid var(--line);
+    border-radius: 16px;
+    padding: 22px;
+  }
+  .fold-card h4 {
+    font-family: 'Fraunces', serif;
+    font-weight: 500;
+    font-size: 19px;
+    margin-bottom: 6px;
+    color: var(--ink);
+  }
+  .fold-card .fold-when {
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--crust);
+    font-weight: 500;
+    margin-bottom: 12px;
+  }
+  .fold-card ol { padding-left: 18px; font-size: 13px; color: var(--ink-soft); line-height: 1.65; }
+  .fold-card ol li { margin-bottom: 4px; }
+  .fold-card .tip {
+    margin-top: 12px;
+    padding-top: 12px;
+    border-top: 1px solid var(--line);
+    font-size: 12px;
+    color: var(--ink-faint);
+    font-style: italic;
+  }
+
+  /* ---------- READINESS SIGNS ---------- */
+  .signs {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 12px;
+    margin-top: 12px;
+  }
+  .sign {
+    background: var(--paper-soft);
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    padding: 18px;
+    text-align: center;
+  }
+  .sign .emoji { font-size: 28px; margin-bottom: 8px; display: block; }
+  .sign .name { font-weight: 600; font-size: 13px; margin-bottom: 4px; }
+  .sign .desc { font-size: 12px; color: var(--ink-soft); line-height: 1.45; }
+
+  /* ---------- RECIPE SUMMARY ---------- */
+  .recipe-summary {
+    background: var(--ink);
+    color: var(--paper);
+    border-radius: 20px;
+    padding: 32px;
+    margin-top: 24px;
+  }
+  .recipe-summary h3 {
+    font-family: 'Fraunces', serif;
+    font-weight: 500;
+    font-size: 22px;
+    margin-bottom: 20px;
+    color: var(--paper);
+  }
+  .recipe-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+    gap: 18px;
+  }
+  .recipe-item { }
+  .recipe-item .ri-label {
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.55);
+    margin-bottom: 6px;
+  }
+  .recipe-item .ri-val {
+    font-family: 'Fraunces', serif;
+    font-size: 24px;
+    font-weight: 500;
+    font-variant-numeric: tabular-nums;
+  }
+  .recipe-item .ri-unit {
+    font-family: 'Inter', sans-serif;
+    font-size: 12px;
+    color: rgba(255,255,255,0.6);
+    margin-left: 4px;
+    font-weight: 400;
+  }
+  .recipe-list {
+    margin-top: 24px;
+    padding-top: 24px;
+    border-top: 1px solid rgba(255,255,255,0.15);
+  }
+  .recipe-list table { width: 100%; border-collapse: collapse; }
+  .recipe-list td {
+    padding: 8px 0;
+    font-size: 14px;
+  }
+  .recipe-list td:first-child { color: rgba(255,255,255,0.65); }
+  .recipe-list td:last-child {
+    text-align: right;
+    font-weight: 500;
+    font-variant-numeric: tabular-nums;
+  }
+
+  /* ---------- SCHEDULE TIMELINE ---------- */
+  .timeline {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    margin-top: 16px;
+  }
+  .tl-step {
+    display: flex;
+    gap: 18px;
+    align-items: flex-start;
+    padding: 18px;
+    background: var(--paper-soft);
+    border-radius: 14px;
+    border: 1px solid var(--line);
+  }
+  .tl-time {
+    font-family: 'Fraunces', serif;
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--crust);
+    min-width: 70px;
+    padding-top: 2px;
+    font-variant-numeric: tabular-nums;
+  }
+  .tl-body { flex: 1; }
+  .tl-body .tl-title { font-weight: 600; font-size: 14px; margin-bottom: 2px; }
+  .tl-body .tl-desc { font-size: 13px; color: var(--ink-soft); }
+
+  /* ---------- PROGRESS BAR ---------- */
+  .progress-wrap {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 24px;
+    padding: 14px 20px;
+    background: var(--sage-soft);
+    border-radius: 14px;
+  }
+  .progress-bar {
+    flex: 1;
+    height: 6px;
+    background: rgba(0,0,0,0.06);
+    border-radius: 3px;
+    overflow: hidden;
+  }
+  .progress-fill {
+    height: 100%;
+    background: var(--sage);
+    border-radius: 3px;
+    transition: width 0.4s ease;
+  }
+  .progress-text {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--ink);
+    font-variant-numeric: tabular-nums;
+  }
+
+  /* ---------- CHIPS / TAGS ---------- */
+  .chips { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 8px; }
+  .chip {
+    background: var(--paper-soft);
+    border: 1px solid var(--line);
+    padding: 6px 12px;
+    border-radius: 999px;
+    font-size: 12px;
+    color: var(--ink-soft);
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .chip:hover { background: var(--marigold-soft); border-color: var(--marigold); color: var(--ink); }
+  .chip.selected { background: var(--marigold); border-color: var(--marigold); color: var(--ink); }
+
+  /* ---------- FOOTER ---------- */
+  footer {
+    text-align: center;
+    margin-top: 80px;
+    padding-top: 32px;
+    border-top: 1px solid var(--line);
+    color: var(--ink-faint);
+    font-size: 12px;
+  }
+  footer a { color: var(--crust); text-decoration: none; }
+
+  /* ---------- RESPONSIVE ---------- */
+  @media (max-width: 600px) {
+    .app { padding: 32px 20px 64px; }
+    .card { padding: 22px; }
+    .tabs { flex-direction: column; border-radius: 20px; max-width: 100%; }
+    .tab { border-radius: 12px; }
+    .tab .num { display: none; }
+    .recipe-summary { padding: 24px; }
+  }
+
+  /* ---------- UTILS ---------- */
+  .small { font-size: 12px; color: var(--ink-soft); }
+  .mt-2 { margin-top: 12px; } .mt-3 { margin-top: 18px; } .mt-4 { margin-top: 24px; }
+  .mb-2 { margin-bottom: 12px; } .mb-3 { margin-bottom: 18px; } .mb-4 { margin-bottom: 24px; }
+  .flex-between { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; }
+
+  /* Animation for timer done */
+  .timer-done {
+    animation: celebrate 0.6s ease;
+  }
+  @keyframes celebrate {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.03); background: var(--sage); }
+  }
+</style>
+</head>
+<body>
+<div class="app">
+
+  <!-- ============ HERO ============ -->
+  <header class="hero">
+    <div class="hero-eyebrow">Your friendly bread companion</div>
+    <h1>The Sourdough <em>Journey</em></h1>
+    <p>Plan, scale, and bake your loaf with confidence — from sleepy starter to golden crust. Let's make something wonderful together.</p>
+  </header>
+
+  <!-- ============ TABS ============ -->
+  <nav class="tabs" role="tablist">
+    <button class="tab active" data-tab="starter" role="tab"><span class="num">1</span>Starter</button>
+    <button class="tab" data-tab="dough" role="tab"><span class="num">2</span>Dough</button>
+    <button class="tab" data-tab="bake" role="tab"><span class="num">3</span>Bake</button>
+  </nav>
+
+  <!-- ============ PANEL 1: STARTER ============ -->
+  <section class="panel active" id="panel-starter">
+    <h2 class="section-title">Build your starter</h2>
+    <p class="section-sub">A healthy, bubbly starter is the soul of your bread. Let's wake one up together.</p>
+
+    <div class="encourage">
+      <span class="icon">🌱</span>
+      <div><strong>You're doing great.</strong> A new starter takes 5–7 days to mature. Be patient — wild yeast is gathering, multiplying, and finding its rhythm. Trust the process!</div>
+    </div>
+
+    <div class="card">
+      <div class="card-label">Starter basics</div>
+      <div class="row">
+        <div class="field">
+          <label>Name your starter (optional)</label>
+          <input type="text" id="starterName" placeholder="e.g. Bubbles, Rusty, Henri" value="My Starter">
+        </div>
+        <div class="field">
+          <label>Age</label>
+          <select id="starterAge">
+            <option value="new">Newborn (Days 1–5)</option>
+            <option value="young" selected>Young (Days 6–14)</option>
+            <option value="mature">Mature (2+ weeks)</option>
+          </select>
+        </div>
+        <div class="field">
+          <label>Flour type for feeding</label>
+          <select id="starterFlour">
+            <option value="all-purpose">All-purpose</option>
+            <option value="bread" selected>Bread flour</option>
+            <option value="whole-wheat">Whole wheat</option>
+            <option value="rye">Rye</option>
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="flex-between mb-3">
+        <div>
+          <div class="card-label">Daily feeding routine</div>
+          <p class="small">Refresh your starter with this ratio. Mark each day complete as you go.</p>
+        </div>
+        <div class="progress-wrap" style="margin: 0; padding: 8px 14px;">
+          <div class="progress-text" id="starterProgressText">0/7</div>
+        </div>
+      </div>
+      <ul class="checklist" id="starterChecklist">
+        <li class="check-item" data-day="1">
+          <div class="check-box"></div>
+          <div class="check-text">
+            <strong>Day 1 — Mix it up.</strong> Combine 50g flour + 50g water in a clean jar. Stir well, cover loosely, leave at room temp.
+            <div class="check-meta">🌾 50g flour · 💧 50g water</div>
+          </div>
+        </li>
+        <li class="check-item" data-day="2">
+          <div class="check-box"></div>
+          <div class="check-text">
+            <strong>Day 2 — Look for bubbles.</strong> You may see a few small bubbles. Stir and feed: 50g starter + 50g flour + 50g water.
+            <div class="check-meta">🫧 Don't worry if it's quiet — it's waking up</div>
+          </div>
+        </li>
+        <li class="check-item" data-day="3">
+          <div class="check-box"></div>
+          <div class="check-text">
+            <strong>Day 3 — A sour smell is normal.</strong> Discard half, then feed 1:1:1 (50g starter + 50g flour + 50g water).
+            <div class="check-meta">👃 It might smell a little funky — that's the bacteria doing their thing</div>
+          </div>
+        </li>
+        <li class="check-item" data-day="4">
+          <div class="check-box"></div>
+          <div class="check-text">
+            <strong>Day 4 — Activity picks up.</strong> More bubbles, sweeter smell. Continue 1:1:1 feedings every 12 hours.
+            <div class="check-meta">📈 Watch for the rise!</div>
+          </div>
+        </li>
+        <li class="check-item" data-day="5">
+          <div class="check-box"></div>
+          <div class="check-text">
+            <strong>Day 5 — Testing for readiness.</strong> Does it double in 4–8 hours? Sweet &amp; yeasty smell? Switch to 1:2:2 feedings.
+            <div class="check-meta">⏱️ Time how long it takes to double</div>
+          </div>
+        </li>
+        <li class="check-item" data-day="6">
+          <div class="check-box"></div>
+          <div class="check-text">
+            <strong>Day 6 — Confirmation round.</strong> Feed again, watch for a consistent rise. If it doubles reliably, you're almost there!
+            <div class="check-meta">🔁 Three consistent feedings = ready</div>
+          </div>
+        </li>
+        <li class="check-item" data-day="7">
+          <div class="check-box"></div>
+          <div class="check-text">
+            <strong>Day 7 — Bake day ready!</strong> Your starter should double in 4–6 hours and have a domed, bubbly top.
+            <div class="check-meta">🎉 Time to bake something beautiful</div>
+          </div>
+        </li>
+      </ul>
+      <div class="timer-bar" id="starterTimer" style="display:none;">
+        <div>
+          <div class="timer-display"><span id="starterTimerDisplay">00:00</span><span class="label-mini">Feeding timer</span></div>
+        </div>
+        <div class="timer-controls">
+          <button class="timer-btn" id="starterTimerStart">Start</button>
+          <button class="timer-btn" id="starterTimerReset">Reset</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-label">How to know your starter is working</div>
+      <p class="small mb-3">Forget the float test — these signs are far more reliable.</p>
+      <div class="signs">
+        <div class="sign">
+          <span class="emoji">📈</span>
+          <div class="name">Doubles predictably</div>
+          <div class="desc">Triples or doubles within 4–8 hours at room temp, twice in a row.</div>
+        </div>
+        <div class="sign">
+          <span class="emoji">⛺️</span>
+          <div class="name">Domed top</div>
+          <div class="desc">Rounded, slightly domed surface — then it relaxes to flat at peak.</div>
+        </div>
+        <div class="sign">
+          <span class="emoji">🫧</span>
+          <div class="name">Bubbles everywhere</div>
+          <div class="desc">Bubbles on top, sides, and bottom — not just surface fizz.</div>
+        </div>
+        <div class="sign">
+          <span class="emoji">👃</span>
+          <div class="name">Pleasant smell</div>
+          <div class="desc">Yeasty, slightly tangy, like yogurt or ripe fruit. (Acetone = hungry, feed it!)</div>
+        </div>
+        <div class="sign">
+          <span class="emoji">🥞</span>
+          <div class="name">Holds its shape</div>
+          <div class="desc">When stirred, slightly stringy and resistant — gluten is alive.</div>
+        </div>
+        <div class="sign">
+          <span class="emoji">✅</span>
+          <div class="name">3 good feedings in a row</div>
+          <div class="desc">Consistency is the real test. One lucky rise doesn't count.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card gentle">
+      <div class="card-label">Build your levain for tomorrow's bake</div>
+      <p class="small mb-3">A levain is a mini starter built just for this recipe. Once your starter is mature, mix this 8–12 hours before you want to bake.</p>
+      <div class="row">
+        <div class="field">
+          <label>Hours until bake</label>
+          <input type="number" id="levainHours" value="10" min="4" max="16">
+        </div>
+        <div class="field">
+          <label>Levain feeding ratio</label>
+          <select id="levainRatio">
+            <option value="1:1:1">1:1:1 (peaks ~4 hrs)</option>
+            <option value="1:2:2">1:2:2 (peaks ~6 hrs)</option>
+            <option value="1:3:3">1:3:3 (peaks ~8 hrs)</option>
+            <option value="1:5:5" selected>1:5:5 (peaks ~10–12 hrs)</option>
+          </select>
+        </div>
+      </div>
+      <p class="small mt-3" id="levainResult">Mix 10g starter + 50g flour + 50g water. Should peak in about 10 hours.</p>
+    </div>
+  </section>
+
+  <!-- ============ PANEL 2: DOUGH ============ -->
+  <section class="panel" id="panel-dough">
+    <h2 class="section-title">Mix, fold &amp; proof</h2>
+    <p class="section-sub">Build strength, develop flavor, and watch the dough transform. The slow magic happens here.</p>
+
+    <div class="encourage">
+      <span class="icon">👐</span>
+      <div><strong>Trust the dough.</strong> Time, temperature, and feel matter more than rigid recipes. The bulk fermentation chart below is a guide — your dough tells the truth.</div>
+    </div>
+
+    <!-- SCALING CARD -->
+    <div class="card">
+      <div class="card-label">Scale your recipe</div>
+      <p class="small mb-3">Tell me how much flour you have, and I'll calculate everything. Hydration adjusts by flour type.</p>
+
+      <div class="row">
+        <div class="field">
+          <label>Total flour weight (g)</label>
+          <input type="number" id="totalFlour" value="500" min="100" max="3000" step="50">
+        </div>
+        <div class="field">
+          <label>Hydration %</label>
+          <select id="hydration">
+            <option value="65">65% (stiff, easy to shape)</option>
+            <option value="70" selected>70% (classic artisan)</option>
+            <option value="75">75% (open crumb, slightly sticky)</option>
+            <option value="80">80% (rustic, very open crumb)</option>
+            <option value="85">85% (advanced, ciabatta-style)</option>
+          </select>
+        </div>
+        <div class="field">
+          <label>Salt %</label>
+          <select id="saltPct">
+            <option value="1.8">1.8% (mild)</option>
+            <option value="2" selected>2% (standard)</option>
+            <option value="2.2">2.2% (bolder flavor)</option>
+          </select>
+        </div>
+        <div class="field">
+          <label>Starter (levain) %</label>
+          <select id="starterPct">
+            <option value="10">10% (slow, deep flavor)</option>
+            <option value="15">15% (balanced)</option>
+            <option value="20" selected>20% (classic)</option>
+            <option value="25">25% (faster)</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="field">
+          <label>Bread flour</label>
+          <input type="number" id="breadFlour" value="400" min="0">
+        </div>
+        <div class="field">
+          <label>Whole wheat flour</label>
+          <input type="number" id="wholeWheat" value="100" min="0">
+        </div>
+        <div class="field">
+          <label>Other flour (rye, spelt…)</label>
+          <input type="number" id="otherFlour" value="0" min="0">
+        </div>
+      </div>
+      <button class="btn small" id="autoBalanceBtn">⚖️ Auto-balance flours to total</button>
+
+      <div class="recipe-summary">
+        <h3>Your recipe</h3>
+        <div class="recipe-grid">
+          <div class="recipe-item">
+            <div class="ri-label">Total dough</div>
+            <div class="ri-val"><span id="rTotalDough">0</span><span class="ri-unit">g</span></div>
+          </div>
+          <div class="recipe-item">
+            <div class="ri-label">Bread flour</div>
+            <div class="ri-val"><span id="rBread">0</span><span class="ri-unit">g</span></div>
+          </div>
+          <div class="recipe-item">
+            <div class="ri-label">Whole wheat</div>
+            <div class="ri-val"><span id="rWhole">0</span><span class="ri-unit">g</span></div>
+          </div>
+          <div class="recipe-item">
+            <div class="ri-label">Other flour</div>
+            <div class="ri-val"><span id="rOther">0</span><span class="ri-unit">g</span></div>
+          </div>
+          <div class="recipe-item">
+            <div class="ri-label">Water</div>
+            <div class="ri-val"><span id="rWater">0</span><span class="ri-unit">g</span></div>
+          </div>
+          <div class="recipe-item">
+            <div class="ri-label">Salt</div>
+            <div class="ri-val"><span id="rSalt">0</span><span class="ri-unit">g</span></div>
+          </div>
+          <div class="recipe-item">
+            <div class="ri-label">Levain</div>
+            <div class="ri-val"><span id="rLevain">0</span><span class="ri-unit">g</span></div>
+          </div>
+          <div class="recipe-item">
+            <div class="ri-label">True hydration</div>
+            <div class="ri-val"><span id="rHydration">0</span><span class="ri-unit">%</span></div>
+          </div>
+        </div>
+        <div class="recipe-list">
+          <table>
+            <tr><td>Flour split (bread / ww / other)</td><td id="rFlourSplit">—</td></tr>
+            <tr><td>Loaf size (recommended)</td><td id="rLoafSize">—</td></tr>
+            <tr><td>Banneton size</td><td id="rBanneton">—</td></tr>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- FOLDING TECHNIQUES -->
+    <div class="card">
+      <div class="card-label">Folding techniques</div>
+      <p class="small mb-3">Three techniques, each with its moment. Most bakers use a combination.</p>
+      <div class="folds">
+        <div class="fold-card">
+          <div class="fold-when">Early bulk · Beginner-friendly</div>
+          <h4>Stretch &amp; Fold</h4>
+          <ol>
+            <li>Wet your hand (no sticking!)</li>
+            <li>Reach under one side, stretch up gently</li>
+            <li>Fold it over to the opposite side</li>
+            <li>Rotate bowl 90° and repeat 4× total</li>
+          </ol>
+          <div class="tip">💡 Best in the first 1–2 hours. Builds strength fast. Skip if the dough tears — let it rest 15 min first.</div>
+        </div>
+        <div class="fold-card">
+          <div class="fold-when">Mid-to-late bulk · Gentle</div>
+          <h4>Coil Fold</h4>
+          <ol>
+            <li>Slide both hands under the center, palms up</li>
+            <li>Lift straight up — dough hangs like a curtain</li>
+            <li>Lower it, letting one end tuck under</li>
+            <li>Rotate 90° and repeat 4× total</li>
+          </ol>
+          <div class="tip">💡 Perfect when the dough is gassy and delicate. Creates beautiful surface tension.</div>
+        </div>
+        <div class="fold-card">
+          <div class="fold-when">Once, very early · Advanced</div>
+          <h4>Lamination</h4>
+          <ol>
+            <li>Spritz work surface with water (no flour)</li>
+            <li>Turn dough out, stretch into a thin sheet</li>
+            <li>Sprinkle inclusions now (seeds, nuts, fruit)</li>
+            <li>Fold like a letter: thirds, then thirds again</li>
+          </ol>
+          <div class="tip">💡 Maximum gluten in one move. Great for adding seeds. Do it before the dough gets too gassy.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- DOUGH STEPS -->
+    <div class="card">
+      <div class="flex-between mb-3">
+        <div class="card-label" style="margin: 0;">Dough preparation steps</div>
+        <div class="progress-wrap" style="margin: 0; padding: 8px 14px;">
+          <div class="progress-text" id="doughProgressText">0/0</div>
+        </div>
+      </div>
+      <ul class="checklist" id="doughChecklist"></ul>
+      <div class="timer-bar" id="doughTimer" style="display:none;">
+        <div>
+          <div class="timer-display"><span id="doughTimerDisplay">00:00</span><span class="label-mini" id="doughTimerLabel">Timer</span></div>
+        </div>
+        <div class="timer-controls">
+          <button class="timer-btn" id="doughTimerStart">Start</button>
+          <button class="timer-btn" id="doughTimerReset">Reset</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- BULK FERMENTATION GUIDE -->
+    <div class="card">
+      <div class="card-label">Bulk fermentation by dough temperature</div>
+      <p class="small mb-3">Set your kitchen temp to see the sweet spot for timing.</p>
+      <div class="row" style="grid-template-columns: 1fr 1fr; max-width: 480px;">
+        <div class="field">
+          <label>Dough temperature</label>
+          <select id="doughTemp">
+            <option value="65">65°F / 18°C (cool)</option>
+            <option value="68">68°F / 20°C</option>
+            <option value="72">72°F / 22°C</option>
+            <option value="75" selected>75°F / 24°C (ideal)</option>
+            <option value="78">78°F / 26°C</option>
+            <option value="82">82°F / 28°C (warm)</option>
+          </select>
+        </div>
+        <div class="field">
+          <label>Starter % (inoculation)</label>
+          <select id="bulkStarterPct">
+            <option value="10">10%</option>
+            <option value="15">15%</option>
+            <option value="20" selected>20%</option>
+            <option value="25">25%</option>
+          </select>
+        </div>
+      </div>
+      <div class="recipe-summary" style="background: var(--cream-warm); color: var(--ink);">
+        <h3 style="color: var(--ink);">Your bulk fermentation window</h3>
+        <div class="recipe-grid">
+          <div class="recipe-item">
+            <div class="ri-label" style="color: var(--ink-soft);">Estimated time</div>
+            <div class="ri-val" style="color: var(--ink);"><span id="bulkTime">—</span></div>
+          </div>
+          <div class="recipe-item">
+            <div class="ri-label" style="color: var(--ink-soft);">Target rise</div>
+            <div class="ri-val" style="color: var(--ink);"><span id="bulkRise">—</span></div>
+          </div>
+          <div class="recipe-item">
+            <div class="ri-label" style="color: var(--ink-soft);">Flavor profile</div>
+            <div class="ri-val" style="color: var(--ink); font-size: 16px; line-height: 1.3;"><span id="bulkFlavor">—</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- READINESS SIGNS -->
+    <div class="card">
+      <div class="card-label">How to know bulk fermentation is done</div>
+      <div class="signs">
+        <div class="sign">
+          <span class="emoji">📏</span>
+          <div class="name">Risen 30–75%</div>
+          <div class="desc">At 75°F aim for 30–50%. Cooler dough needs more rise.</div>
+        </div>
+        <div class="sign">
+          <span class="emoji">⛰️</span>
+          <div class="name">Domed top</div>
+          <div class="desc">Surface is rounded, not flat or sunken.</div>
+        </div>
+        <div class="sign">
+          <span class="emoji">🫧</span>
+          <div class="name">Bubbles on sides</div>
+          <div class="desc">Visible through the bowl — fermentation is active throughout.</div>
+        </div>
+        <div class="sign">
+          <span class="emoji">🍮</span>
+          <div class="name">The jiggle test</div>
+          <div class="desc">Shake the bowl — it wobbles like set jello.</div>
+        </div>
+        <div class="sign">
+          <span class="emoji">🪟</span>
+          <div class="name">Windowpane</div>
+          <div class="desc">Stretch a small piece thin — light passes through without tearing.</div>
+        </div>
+        <div class="sign">
+          <span class="emoji">✨</span>
+          <div class="name">Smooth &amp; alive</div>
+          <div class="desc">Surface is smooth, slightly tacky, springs back gently.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ PANEL 3: BAKE ============ -->
+  <section class="panel" id="panel-bake">
+    <h2 class="section-title">Shape, proof &amp; bake</h2>
+    <p class="section-sub">The final stretch. Cold proof for flavor, hot oven for magic, and patient cooling. You've got this.</p>
+
+    <div class="encourage">
+      <span class="icon">🔥</span>
+      <div><strong>Almost there.</strong> A good bake is 10% technique and 90% patience. Let the cold proof do its work, preheat thoroughly, and trust the process.</div>
+    </div>
+
+    <!-- TIMELINE -->
+    <div class="card">
+      <div class="card-label">Bake day timeline</div>
+      <p class="small mb-3">A gentle schedule for a relaxed, overnight bake. Adjust as needed.</p>
+      <div class="timeline">
+        <div class="tl-step">
+          <div class="tl-time">Morning</div>
+          <div class="tl-body">
+            <div class="tl-title">Feed your starter</div>
+            <div class="tl-desc">1:5:5 ratio if you're baking tomorrow morning. Let it peak on the counter.</div>
+          </div>
+        </div>
+        <div class="tl-step">
+          <div class="tl-time">~8 hrs before bake</div>
+          <div class="tl-body">
+            <div class="tl-title">Autolyse + mix</div>
+            <div class="tl-desc">Combine flour + water. Rest 30 min. Add levain + salt, mix until cohesive.</div>
+          </div>
+        </div>
+        <div class="tl-step">
+          <div class="tl-time">+30 min</div>
+          <div class="tl-body">
+            <div class="tl-title">First fold</div>
+            <div class="tl-desc">Wet hands, 4 stretch &amp; folds. Rotate 90° between each. Rest 30 min.</div>
+          </div>
+        </div>
+        <div class="tl-step">
+          <div class="tl-time">+60 min</div>
+          <div class="tl-body">
+            <div class="tl-title">Second fold</div>
+            <div class="tl-desc">Switch to coil folds — they're gentler as the dough gets gassier.</div>
+          </div>
+        </div>
+        <div class="tl-step">
+          <div class="tl-time">+90 min</div>
+          <div class="tl-body">
+            <div class="tl-title">Third fold</div>
+            <div class="tl-desc">Coil fold again. Watch for the dough holding its shape.</div>
+          </div>
+        </div>
+        <div class="tl-step">
+          <div class="tl-time">+3–5 hrs</div>
+          <div class="tl-body">
+            <div class="tl-title">Bulk fermentation ends</div>
+            <div class="tl-desc">Dough has risen 30–50%, domed, jiggly. Time to shape.</div>
+          </div>
+        </div>
+        <div class="tl-step">
+          <div class="tl-time">Shaping</div>
+          <div class="tl-body">
+            <div class="tl-title">Pre-shape, rest, final shape</div>
+            <div class="tl-desc">Build tension. Place seam-up in a floured banneton.</div>
+          </div>
+        </div>
+        <div class="tl-step">
+          <div class="tl-time">Fridge</div>
+          <div class="tl-body">
+            <div class="tl-title">Cold proof · 12–16 hours</div>
+            <div class="tl-desc">Slow fermentation for flavor, color, and easier scoring. Sleep on it.</div>
+          </div>
+        </div>
+        <div class="tl-step">
+          <div class="tl-time">Bake day</div>
+          <div class="tl-body">
+            <div class="tl-title">Preheat, score, bake</div>
+            <div class="tl-desc">Dutch oven 500°F for 45 min. Score cold. Bake covered 20 min, uncovered 20–25 min.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- BAKING STEPS CHECKLIST -->
+    <div class="card">
+      <div class="flex-between mb-3">
+        <div class="card-label" style="margin: 0;">Baking steps</div>
+        <div class="progress-wrap" style="margin: 0; padding: 8px 14px;">
+          <div class="progress-text" id="bakeProgressText">0/0</div>
+        </div>
+      </div>
+      <ul class="checklist" id="bakeChecklist"></ul>
+      <div class="timer-bar" id="bakeTimer" style="display:none;">
+        <div>
+          <div class="timer-display"><span id="bakeTimerDisplay">00:00</span><span class="label-mini" id="bakeTimerLabel">Timer</span></div>
+        </div>
+        <div class="timer-controls">
+          <button class="timer-btn" id="bakeTimerStart">Start</button>
+          <button class="timer-btn" id="bakeTimerReset">Reset</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- OVEN SETTINGS -->
+    <div class="card">
+      <div class="card-label">Oven &amp; equipment</div>
+      <div class="row">
+        <div class="field">
+          <label>Dutch oven</label>
+          <select id="dutchOven">
+            <option value="cast" selected>Cast iron (Lodge, Le Creuset)</option>
+            <option value="combo">Combo cooker</option>
+            <option value="none">No Dutch oven — use steam tray method</option>
+          </select>
+        </div>
+        <div class="field">
+          <label>Preheat temperature</label>
+          <select id="preheatTemp">
+            <option value="450">450°F / 232°C (gentler)</option>
+            <option value="500" selected>500°F / 260°C (recommended)</option>
+          </select>
+        </div>
+        <div class="field">
+          <label>Covered bake</label>
+          <select id="coveredBake">
+            <option value="20" selected>20 minutes (steam phase)</option>
+            <option value="25">25 minutes (more open crumb)</option>
+            <option value="30">30 minutes (denser)</option>
+          </select>
+        </div>
+        <div class="field">
+          <label>Uncovered bake</label>
+          <select id="uncoveredBake">
+            <option value="15">15 minutes (paler crust)</option>
+            <option value="20" selected>20 minutes (golden)</option>
+            <option value="25">25 minutes (deep mahogany)</option>
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <!-- TROUBLESHOOTING -->
+    <div class="card">
+      <div class="card-label">Troubleshooting</div>
+      <div class="folds" style="grid-template-columns: 1fr;">
+        <div class="fold-card">
+          <h4>🍞 Flat loaf, no oven spring</h4>
+          <p class="small">Likely overproofed, or Dutch oven wasn't hot enough. Check your cold proof time, and preheat the pot for a full 45 minutes.</p>
+        </div>
+        <div class="fold-card">
+          <h4>🌋 Score blew out the side</h4>
+          <p class="small">Surface tension was too tight, or score was too shallow. Cut at 30–45° angle, ½ inch deep. Try rice flour dusting to reduce drag.</p>
+        </div>
+        <div class="fold-card">
+          <h4>🥖 Pale crust</h4>
+          <p class="small">Your oven runs cooler than the dial (most do!). Use an oven thermometer, or extend the uncovered phase by 5 minutes.</p>
+        </div>
+        <div class="fold-card">
+          <h4>🔥 Burnt bottom</h4>
+          <p class="small">Move the rack up one position, or place a baking sheet below the Dutch oven to diffuse the heat.</p>
+        </div>
+        <div class="fold-card">
+          <h4>😶 Gummy interior</h4>
+          <p class="small">Underbaked, or cut too early. Internal temp should hit 205–210°F. Then wait <em>at least</em> 1 hour before slicing — the crumb sets as it cools.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="card gentle" style="text-align: center;">
+      <div class="card-label">You're ready</div>
+      <p style="font-family: 'Fraunces', serif; font-size: 22px; line-height: 1.4; color: var(--ink); max-width: 480px; margin: 0 auto;">"Every loaf teaches you something. The first one is a teacher, the second a friend, and the third — well, the third is bread."</p>
+      <p class="small mt-2">— Anonymous, on a flour-dusted counter somewhere</p>
+    </div>
+  </section>
+
+  <footer>
+    <p>Made with 🌾 for sourdough bakers. Built with baker's math, fermentation science, and lots of love.</p>
+    <p class="mt-2">Tips inspired by <a href="https://grantbakes.com" target="_blank">Grant Bakes</a> · <a href="https://thesourdoughjourney.com" target="_blank">The Sourdough Journey</a> · <a href="https://www.theperfectloaf.com" target="_blank">The Perfect Loaf</a></p>
+  </footer>
+</div>
+
+<script>
+// =================== STATE ===================
+const state = {
+  starter: { checked: new Set() },
+  dough: { checked: new Set() },
+  bake: { checked: new Set() }
+};
+
+// =================== TABS ===================
+document.querySelectorAll('.tab').forEach(tab => {
+  tab.addEventListener('click', () => {
+    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+    document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+    tab.classList.add('active');
+    document.getElementById('panel-' + tab.dataset.tab).classList.add('active');
+  });
+});
+
+// =================== CHECKLIST LOGIC ===================
+function setupChecklist(checklistId, progressTextId, stateKey, timerId, timerDisplayId, timerStartId, timerResetId, timerLabelId, stepDurations) {
+  const items = document.querySelectorAll('#' + checklistId + ' .check-item');
+  const progressText = document.getElementById(progressTextId);
+  const timer = document.getElementById(timerId);
+  const timerDisplay = document.getElementById(timerDisplayId);
+  const timerStart = document.getElementById(timerStartId);
+  const timerReset = document.getElementById(timerResetId);
+  const timerLabel = document.getElementById(timerLabelId);
+  const total = items.length;
+  let countdown = 0;
+  let interval = null;
+  let currentStepIndex = -1;
+
+  function updateProgress() {
+    const done = state[stateKey].checked.size;
+    progressText.textContent = `${done}/${total}`;
+  }
+
+  items.forEach((item, index) => {
+    item.addEventListener('click', () => {
+      item.classList.toggle('done');
+      if (item.classList.contains('done')) {
+        state[stateKey].checked.add(index);
+        // start timer for this step
+        currentStepIndex = index;
+        const dur = stepDurations[index];
+        if (dur && dur > 0) {
+          startCountdown(dur, item.querySelector('.check-text strong')?.textContent || 'Step');
+        }
+      } else {
+        state[stateKey].checked.delete(index);
+        if (currentStepIndex === index) {
+          stopCountdown();
+          timer.style.display = 'none';
+        }
+      }
+      updateProgress();
+    });
+  });
+
+  function startCountdown(seconds, label) {
+    countdown = seconds;
+    timer.style.display = 'flex';
+    timer.classList.add('timer-running');
+    if (timerLabel) timerLabel.textContent = label.substring(0, 30);
+    updateDisplay();
+    if (interval) clearInterval(interval);
+    interval = setInterval(() => {
+      countdown--;
+      updateDisplay();
+      if (countdown <= 0) {
+        clearInterval(interval);
+        interval = null;
+        timer.classList.remove('timer-running');
+        timer.classList.add('timer-done');
+        // soft chime
+        playChime();
+        setTimeout(() => timer.classList.remove('timer-done'), 800);
+      }
+    }, 1000);
+  }
+
+  function stopCountdown() {
+    if (interval) { clearInterval(interval); interval = null; }
+    timer.classList.remove('timer-running');
+  }
+
+  function updateDisplay() {
+    const m = Math.floor(countdown / 60);
+    const s = countdown % 60;
+    timerDisplay.textContent = `${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}`;
+  }
+
+  if (timerStart) {
+    timerStart.addEventListener('click', () => {
+      if (interval) {
+        stopCountdown();
+        timerStart.textContent = 'Resume';
+      } else {
+        if (countdown <= 0 && currentStepIndex >= 0 && stepDurations[currentStepIndex]) {
+          countdown = stepDurations[currentStepIndex];
+        }
+        timer.classList.add('timer-running');
+        timerStart.textContent = 'Pause';
+        interval = setInterval(() => {
+          countdown--;
+          updateDisplay();
+          if (countdown <= 0) {
+            clearInterval(interval); interval = null;
+            timer.classList.remove('timer-running');
+            timer.classList.add('timer-done');
+            playChime();
+            setTimeout(() => timer.classList.remove('timer-done'), 800);
+            timerStart.textContent = 'Start';
+          }
+        }, 1000);
+      }
+    });
+  }
+  if (timerReset) {
+    timerReset.addEventListener('click', () => {
+      stopCountdown();
+      if (currentStepIndex >= 0 && stepDurations[currentStepIndex]) {
+        countdown = stepDurations[currentStepIndex];
+      } else {
+        countdown = 0;
+      }
+      updateDisplay();
+      timerStart.textContent = 'Start';
+      timer.classList.remove('timer-running');
+    });
+  }
+
+  updateProgress();
+}
+
+// soft notification chime using Web Audio API
+function playChime() {
+  try {
+    const ctx = new (window.AudioContext || window.webkitAudioContext)();
+    const notes = [523.25, 659.25, 783.99]; // C5, E5, G5
+    notes.forEach((freq, i) => {
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+      osc.connect(gain);
+      gain.connect(ctx.destination);
+      osc.frequency.value = freq;
+      osc.type = 'sine';
+      gain.gain.setValueAtTime(0, ctx.currentTime + i * 0.15);
+      gain.gain.linearRampToValueAtTime(0.15, ctx.currentTime + i * 0.15 + 0.05);
+      gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + i * 0.15 + 0.5);
+      osc.start(ctx.currentTime + i * 0.15);
+      osc.stop(ctx.currentTime + i * 0.15 + 0.5);
+    });
+  } catch(e) {}
+}
+
+// =================== STARTER CHECKLIST ===================
+setupChecklist(
+  'starterChecklist',
+  'starterProgressText',
+  'starter',
+  'starterTimer',
+  'starterTimerDisplay',
+  'starterTimerStart',
+  'starterTimerReset',
+  null,
+  [0, 12*3600, 12*3600, 12*3600, 8*3600, 12*3600, 6*3600] // seconds for each day's next-feed timer
+);
+
+// =================== DOUGH CHECKLIST ===================
+const doughSteps = [
+  { title: 'Autolyse', desc: 'Mix flour + water. Rest 30 min covered.', dur: 30*60 },
+  { title: 'Mix in levain & salt', desc: 'Pinch through until fully incorporated.', dur: 5*60 },
+  { title: 'Stretch & fold #1', desc: '4 folds, rotating 90° each. Wet hands!', dur: 0 },
+  { title: 'Rest 30 min', desc: 'Cover and let the dough relax.', dur: 30*60 },
+  { title: 'Stretch & fold #2', desc: 'Another set of 4. Dough is gaining strength.', dur: 0 },
+  { title: 'Rest 30 min', desc: '', dur: 30*60 },
+  { title: 'Coil fold #1', desc: 'Switch to coil folds — gentler on gassy dough.', dur: 0 },
+  { title: 'Rest 30 min', desc: '', dur: 30*60 },
+  { title: 'Coil fold #2', desc: 'Final coil fold. Dough should feel alive.', dur: 0 },
+  { title: 'Bulk ferment to readiness', desc: 'Wait for 30–50% rise, domed top, jiggle test passes.', dur: 60*60 }
+];
+
+const doughChecklist = document.getElementById('doughChecklist');
+doughSteps.forEach((s, i) => {
+  const li = document.createElement('li');
+  li.className = 'check-item';
+  li.innerHTML = `
+    <div class="check-box"></div>
+    <div class="check-text">
+      <strong>${s.title}</strong>
+      <div class="check-meta">${s.desc}${s.dur > 0 ? ' · ⏱️ Timer available' : ''}</div>
+    </div>
+  `;
+  doughChecklist.appendChild(li);
+});
+
+setupChecklist(
+  'doughChecklist',
+  'doughProgressText',
+  'dough',
+  'doughTimer',
+  'doughTimerDisplay',
+  'doughTimerStart',
+  'doughTimerReset',
+  'doughTimerLabel',
+  doughSteps.map(s => s.dur)
+);
+
+// =================== BAKE CHECKLIST ===================
+const bakeSteps = [
+  { title: 'Pre-shape the dough', desc: 'Tip out gently, fold into a loose round, rest 20 min.', dur: 20*60 },
+  { title: 'Final shape', desc: 'Build surface tension. Boule or bâtard — your call!', dur: 5*60 },
+  { title: 'Cold proof', desc: 'Banneton into the fridge. 12–16 hours of slow flavor development.', dur: 14*3600 },
+  { title: 'Preheat oven & Dutch oven', desc: '500°F, full 45 minutes. Cast iron needs to soak in the heat.', dur: 45*60 },
+  { title: 'Score the dough', desc: 'Cold dough straight from fridge. One decisive cut, ½" deep at 30–45°.', dur: 0 },
+  { title: 'Load into Dutch oven', desc: 'Use parchment as a sling. Lower gently into the screaming-hot pot.', dur: 0 },
+  { title: 'Bake covered (steam phase)', desc: '20 minutes at 500°F. Don\'t open it — oven spring is happening!', dur: 20*60 },
+  { title: 'Bake uncovered (crust phase)', desc: 'Remove lid, drop to 450°F. 20–25 min until deep mahogany.', dur: 22*60 },
+  { title: 'Check internal temp', desc: 'Should hit 205–210°F / 96–99°C in the center.', dur: 0 },
+  { title: 'Cool on wire rack', desc: 'At least 1 hour — ideally 2. The crumb sets as it cools. Patience!', dur: 60*60 }
+];
+
+const bakeChecklist = document.getElementById('bakeChecklist');
+bakeSteps.forEach((s, i) => {
+  const li = document.createElement('li');
+  li.className = 'check-item';
+  li.innerHTML = `
+    <div class="check-box"></div>
+    <div class="check-text">
+      <strong>${s.title}</strong>
+      <div class="check-meta">${s.desc}${s.dur > 0 ? ' · ⏱️ Timer available' : ''}</div>
+    </div>
+  `;
+  bakeChecklist.appendChild(li);
+});
+
+setupChecklist(
+  'bakeChecklist',
+  'bakeProgressText',
+  'bake',
+  'bakeTimer',
+  'bakeTimerDisplay',
+  'bakeTimerStart',
+  'bakeTimerReset',
+  'bakeTimerLabel',
+  bakeSteps.map(s => s.dur)
+);
+
+// =================== RECIPE SCALING ===================
+const inputs = {
+  totalFlour: document.getElementById('totalFlour'),
+  breadFlour: document.getElementById('breadFlour'),
+  wholeWheat: document.getElementById('wholeWheat'),
+  otherFlour: document.getElementById('otherFlour'),
+  hydration: document.getElementById('hydration'),
+  saltPct: document.getElementById('saltPct'),
+  starterPct: document.getElementById('starterPct')
+};
+
+const outputs = {
+  rTotalDough: document.getElementById('rTotalDough'),
+  rBread: document.getElementById('rBread'),
+  rWhole: document.getElementById('rWhole'),
+  rOther: document.getElementById('rOther'),
+  rWater: document.getElementById('rWater'),
+  rSalt: document.getElementById('rSalt'),
+  rLevain: document.getElementById('rLevain'),
+  rHydration: document.getElementById('rHydration'),
+  rFlourSplit: document.getElementById('rFlourSplit'),
+  rLoafSize: document.getElementById('rLoafSize'),
+  rBanneton: document.getElementById('rBanneton')
+};
+
+function calculateRecipe() {
+  const totalFlour = parseFloat(inputs.totalFlour.value) || 0;
+  const breadFlour = parseFloat(inputs.breadFlour.value) || 0;
+  const wholeWheat = parseFloat(inputs.wholeWheat.value) || 0;
+  const otherFlour = parseFloat(inputs.otherFlour.value) || 0;
+  const flourSum = breadFlour + wholeWheat + otherFlour;
+  const hydration = parseFloat(inputs.hydration.value) / 100;
+  const saltPct = parseFloat(inputs.saltPct.value) / 100;
+  const starterPct = parseFloat(inputs.starterPct.value) / 100;
+
+  // Use the specified total flour, but if flour split doesn't add up, warn
+  let actualBread = breadFlour, actualWhole = wholeWheat, actualOther = otherFlour;
+  if (flourSum > 0 && Math.abs(flourSum - totalFlour) > 1) {
+    // scale down flours to match total
+    const factor = totalFlour / flourSum;
+    actualBread = Math.round(breadFlour * factor);
+    actualWhole = Math.round(wholeWheat * factor);
+    actualOther = Math.round(otherFlour * factor);
+  }
+
+  // Use the sum of flour split if it's close, otherwise use total
+  const effectiveFlour = (flourSum > 0) ? (actualBread + actualWhole + actualOther) : totalFlour;
+  const water = Math.round(effectiveFlour * hydration);
+  const salt = Math.round(effectiveFlour * saltPct * 10) / 10;
+  const levain = Math.round(effectiveFlour * starterPct);
+  const totalDough = effectiveFlour + water + salt + levain;
+
+  // True hydration (including levain water at 100% hydration)
+  const levainFlour = levain * 0.5;
+  const levainWater = levain * 0.5;
+  const trueFlour = effectiveFlour + levainFlour;
+  const trueWater = water + levainWater;
+  const trueHydration = (trueWater / trueFlour) * 100;
+
+  outputs.rTotalDough.textContent = Math.round(totalDough);
+  outputs.rBread.textContent = actualBread;
+  outputs.rWhole.textContent = actualWhole;
+  outputs.rOther.textContent = actualOther;
+  outputs.rWater.textContent = water;
+  outputs.rSalt.textContent = salt;
+  outputs.rLevain.textContent = levain;
+  outputs.rHydration.textContent = trueHydration.toFixed(1);
+  outputs.rFlourSplit.textContent = `${actualBread}g / ${actualWhole}g / ${actualOther}g`;
+
+  // Loaf size & banneton
+  let loaf, banneton;
+  if (totalDough < 600) { loaf = 'Mini (1 small loaf)'; banneton = '6" / 15cm round'; }
+  else if (totalDough < 1200) { loaf = 'Standard (1 boule)'; banneton = '8" / 20cm round or oval'; }
+  else if (totalDough < 2000) { loaf = 'Large (1 big boule or 2 loaves)'; banneton = '10" / 25cm round'; }
+  else { loaf = 'Batch (2–3 loaves)'; banneton = 'Multiple bannetons'; }
+  outputs.rLoafSize.textContent = loaf;
+  outputs.rBanneton.textContent = banneton;
+}
+
+Object.values(inputs).forEach(input => {
+  input.addEventListener('input', calculateRecipe);
+});
+
+document.getElementById('autoBalanceBtn').addEventListener('click', () => {
+  const totalFlour = parseFloat(inputs.totalFlour.value) || 500;
+  const breadFlour = parseFloat(inputs.breadFlour.value) || 0;
+  const wholeWheat = parseFloat(inputs.wholeWheat.value) || 0;
+  const otherFlour = parseFloat(inputs.otherFlour.value) || 0;
+  const sum = breadFlour + wholeWheat + otherFlour;
+  if (sum > 0) {
+    // scale proportions to total
+    const factor = totalFlour / sum;
+    inputs.breadFlour.value = Math.round(breadFlour * factor);
+    inputs.wholeWheat.value = Math.round(wholeWheat * factor);
+    inputs.otherFlour.value = Math.round(otherFlour * factor);
+  }
+  calculateRecipe();
+});
+
+calculateRecipe();
+
+// =================== BULK FERMENTATION CALC ===================
+function updateBulk() {
+  const temp = parseFloat(document.getElementById('doughTemp').value);
+  const starter = parseFloat(document.getElementById('bulkStarterPct').value);
+
+  // Lookup table: [temp][starter] = {time_low, time_high, rise_low, rise_high, flavor}
+  const table = {
+    65: { 10: {t: '12–15 hrs', r: '85–100%', f: 'Deep, complex, slightly acetic'},
+          15: {t: '11–13 hrs', r: '80–95%', f: 'Rich tang, lots of flavor'},
+          20: {t: '10–12 hrs', r: '75–90%', f: 'Balanced, full-flavored'},
+          25: {t: '9–10 hrs', r: '70–85%', f: 'Mild tang, more acidic'} },
+    68: { 10: {t: '9–11 hrs', r: '70–85%', f: 'Complex, slightly acetic'},
+          15: {t: '8–10 hrs', r: '65–80%', f: 'Rich, tangy'},
+          20: {t: '7–9 hrs', r: '60–75%', f: 'Balanced'},
+          25: {t: '6–8 hrs', r: '55–70%', f: 'Slightly tangy'} },
+    72: { 10: {t: '7–9 hrs', r: '55–70%', f: 'Balanced, complex'},
+          15: {t: '6–8 hrs', r: '50–65%', f: 'Pleasant tang'},
+          20: {t: '5–7 hrs', r: '45–60%', f: 'Mild, lactic-forward'},
+          25: {t: '4.5–6 hrs', r: '40–55%', f: 'Soft tang'} },
+    75: { 10: {t: '6–7 hrs', r: '45–55%', f: 'Lactic, mild'},
+          15: {t: '5–6 hrs', r: '40–50%', f: 'Mild, creamy'},
+          20: {t: '4–5 hrs', r: '30–50%', f: 'The sweet spot — mild & balanced'},
+          25: {t: '3.5–5 hrs', r: '30–45%', f: 'Soft, yogurt-like'} },
+    78: { 10: {t: '5–6 hrs', r: '35–45%', f: 'Mild, lactic'},
+          15: {t: '4–5 hrs', r: '30–40%', f: 'Soft, creamy'},
+          20: {t: '3.5–4 hrs', r: '25–35%', f: 'Lactic, very mild'},
+          25: {t: '3–3.5 hrs', r: '20–30%', f: 'Light, almost neutral'} },
+    82: { 10: {t: '3.5–4.5 hrs', r: '25–35%', f: 'Very mild'},
+          15: {t: '3–4 hrs', r: '20–30%', f: 'Light tang'},
+          20: {t: '2.5–3.5 hrs', r: '20–25%', f: 'Almost neutral, watch carefully!'},
+          25: {t: '2–3 hrs', r: '15–22%', f: 'Move fast!'} }
+  };
+
+  const data = table[temp]?.[starter] || {t: '—', r: '—', f: '—'};
+  document.getElementById('bulkTime').textContent = data.t;
+  document.getElementById('bulkRise').textContent = data.r;
+  document.getElementById('bulkFlavor').textContent = data.f;
+}
+
+document.getElementById('doughTemp').addEventListener('change', updateBulk);
+document.getElementById('bulkStarterPct').addEventListener('change', updateBulk);
+updateBulk();
+
+// =================== LEVAIN CALC ===================
+function updateLevain() {
+  const hours = parseInt(document.getElementById('levainHours').value) || 10;
+  const ratioStr = document.getElementById('levainRatio').value;
+  const parts = ratioStr.split(':').map(n => parseInt(n));
+  const totalParts = parts.reduce((a,b) => a+b, 0);
+  // typical peak time per ratio (hours, at 75°F)
+  const peakTimes = { '1:1:1': 4, '1:2:2': 6, '1:3:3': 8, '1:5:5': 10 };
+
+  let bestRatio = ratioStr;
+  // suggest best ratio based on hours
+  if (hours <= 5) bestRatio = '1:1:1';
+  else if (hours <= 7) bestRatio = '1:2:2';
+  else if (hours <= 9) bestRatio = '1:3:3';
+  else bestRatio = '1:5:5';
+
+  // build a reasonable levain (e.g. for 500g flour recipe -> 100g levain)
+  // parts: [starter, flour, water]
+  const ratioParts = bestRatio.split(':').map(n => parseInt(n));
+  const total = ratioParts.reduce((a,b) => a+b, 0);
+  // assume user wants ~100g of levain
+  const targetLevain = 100;
+  const unit = targetLevain / total;
+  const sFlour = Math.round(unit * ratioParts[1]);
+  const sWater = Math.round(unit * ratioParts[2]);
+  const sStarter = Math.round(unit * ratioParts[0]);
+
+  document.getElementById('levainResult').innerHTML = `Mix <strong>${sStarter}g starter</strong> + <strong>${sFlour}g flour</strong> + <strong>${sWater}g water</strong>. Should peak in about ${peakTimes[bestRatio]} hours at 75°F. ${bestRatio !== ratioStr ? '<br><em>💡 Tip: Try the ' + bestRatio + ' ratio for this timeframe.</em>' : ''}`;
+
+  if (bestRatio !== ratioStr) {
+    document.getElementById('levainRatio').value = bestRatio;
+  }
+}
+
+document.getElementById('levainHours').addEventListener('input', updateLevain);
+document.getElementById('levainRatio').addEventListener('change', updateLevain);
+updateLevain();
+
+// initial progress texts
+document.getElementById('doughProgressText').textContent = `0/${doughSteps.length}`;
+document.getElementById('bakeProgressText').textContent = `0/${bakeSteps.length}`;
+</script>
+</body>
+</html>
